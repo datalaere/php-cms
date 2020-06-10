@@ -92,24 +92,46 @@ class DB
 
     public function insert($table, $fields = array())
     {
-        if(count($fields)) {
+        $keys = array_keys($fields);
+        $values = null;
+        $x = 1;
 
-            $keys = array_keys($fields);
-            $values = null;
-            $x = 1;
-
-            foreach ($fields as $field) {
-                
-                $values .= '?';
-                if ($x < count($fields)) {
+        foreach($fields as $field) {
+            $values .= '?';
+            if ($x < count($fields)) {
                     $values .= ', ';
-                }
-                $x++;
             }
-
-            $sql = "INSERT INTO {$table} (`" . implode('`,`', $keys) . "`) VALUES ({$values})";
+            $x++;
         }
 
+        $sql = "INSERT INTO {$table} (`" . implode('`,`', $keys) . "`) VALUES ({$values})";
+
+        if(!$this->query($sql, $fields)->error()) {
+            return true;
+        }
+
+        return false;
+    }
+
+    public function update($table, $id, $fields = array(), $attribute = 'id')
+    {
+        $set = '';
+        $x   = 1;
+
+        foreach($fields as $name => $value) {
+            $set .= "{$name} = ?";
+            if($x < count($fields)) {
+                $set .= ', ';
+            }
+            $x++;
+        }
+
+        $sql = "UPDATE {$table} SET {$set} WHERE {$attribute} = {$id}";
+
+        if (!$this->query($sql, $fields)->error())
+        {
+            return true;
+        }
         return false;
     }
 
@@ -137,8 +159,5 @@ class DB
     {
         return $this->_pdo->lastInsertId();
     }
-
-
-
 
 }

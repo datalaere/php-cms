@@ -2,9 +2,14 @@
 
 require_once('includes/bootstrap/app.php');
 
-$users = DB::singleton()->get('users', array('username', '=', 'admin'));
+//$users = DB::singleton()->get('users', array('username', '=', 'admin'));
 
-var_dump($users);
+DB::singleton()->update('users', 2, array(
+    'username' => 'test2',
+    'password' => 'pass2'
+));
+
+//var_dump($users);
 
 /*
 if($users->count()) {
