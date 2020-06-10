@@ -8,7 +8,7 @@ spl_autoload_register(function($class) {
     require_once("includes/classes/$class.php");
 });
 
-foreach(glob('functions/*') as $function) {
-    require_once("includes/functions/$function.php");
+foreach(glob('includes/functions/*') as $function) {
+    require_once($function);
 }
 
