@@ -25,8 +25,25 @@ if(Request::exists()) {
             ));
 
             if($check->passed()) {
-                // register
-                echo 'passed!';
+                
+                $user = new Auth();
+                $salt = Hash::salt(32);
+                try {
+                    $user->create(array(
+                        'username' => Request::get('username'),
+                        'password' => Hash::make(Request::get('password'), $salt),
+                        'salt' => $salt,
+                        'name' => Request::get('name'),
+                        'joined' => date('Y-m-d H:i:s'),
+                        'role' => 1
+                    ));
+
+                    Session::flash('success', 'You registered successfully!');
+                    
+                } catch(Exception $error) {
+                    die($error->getMessage());
+                }
+
             } else {
                 foreach($check->errors() as $error) {
                     echo $error, '<br>';
