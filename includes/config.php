@@ -14,6 +14,7 @@ return array(
         'expiry' => 604800
     ),
     'session' => array(
-        'name' => 'user'
+        'name' => 'user',
+        'token_name' => 'csrf'
     )
 );

@@ -1,36 +1,40 @@
 <?php
     require_once('includes/bootstrap/app.php');
 
-    if(Request::exists()) {
-        $v = new Validate();
-        $check = $v->check($_POST, array(
-            'name' => array(
-                'required' => true,
-                'min' => 2,
-                'max' => 50
-            ),
-            'username' => array(
-                'name' => 'Username',
-                'required' => true,
-                'min' => 2,
-                'max' => 20,
-                'unique' => 'users'
-            ),
-            'password' => array(
-                'required' => true,
-                'min' => 6
-            )
-        ));
+if(Request::exists()) {
+    if(!Token::get(Request::get('token'))) {
+        if(Request::exists()) {
+            $v = new Validate();
+            $check = $v->check($_POST, array(
+                'name' => array(
+                    'required' => true,
+                    'min' => 2,
+                    'max' => 50
+                ),
+                'username' => array(
+                    'name' => 'Username',
+                    'required' => true,
+                    'min' => 2,
+                    'max' => 20,
+                    'unique' => 'users'
+                ),
+                'password' => array(
+                    'required' => true,
+                    'min' => 6
+                )
+            ));
 
-        if($check->passed()) {
-            // register
-            echo 'passed!';
-        } else {
-            foreach($check->errors() as $error) {
-                echo $error, '<br>';
+            if($check->passed()) {
+                // register
+                echo 'passed!';
+            } else {
+                foreach($check->errors() as $error) {
+                    echo $error, '<br>';
+                }
             }
         }
     }
+}
 ?>
 <form action="" method="POST">
     <div class="field">
@@ -48,5 +52,6 @@
         <input type="password" name="password" id="password" value="<?php  esc(Request::get('password'));  ?>" autocomplete="off">
     </div>
 
+    <input type="hidden" name="token" value="<?php esc(Token::set()); ?>">
     <input type="submit" value="Register">
 </form>
