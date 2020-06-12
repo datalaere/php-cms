@@ -5,7 +5,7 @@ if(Request::exists()) {
     if(Token::check(Request::get('token'))) {
         $v = new Validate();
 
-        $validation = $v->check(array(
+        $validation = $v->check($_POST, array(
             'username' => array('required' => true),
             'password' => array('required' => true)
         ));

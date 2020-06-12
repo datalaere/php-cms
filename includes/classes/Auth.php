@@ -38,6 +38,17 @@ class Auth
         }
     }
 
+    public function update($fields = array(), $id = null)
+    {
+        if(!$id && $this->auth()) {
+            $id = $this->getUserId();
+        }
+
+        if(!$this->_db->update($this->_table, $id, $fields)) {
+            throw new Exception('Error updating user!');
+        }
+    }
+
     public function create($fields = array())
     {
         if(!$this->_db->insert($this->_table, $fields)) {
@@ -104,6 +115,17 @@ class Auth
     public function getUserSession()
     {
         return $this->data()->session;
+    }
+
+    public function role($key)
+    {
+        $role = json_decode($this->data()->role, true);
+        
+        if($role[$key] == true) {
+            return true;
+        }
+
+        return false;
     }
 
     public function exists()

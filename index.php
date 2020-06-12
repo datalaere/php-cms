@@ -31,8 +31,18 @@ if($user->auth()) {
 <p>Hello <a href="#"><?php esc($user->data()->username); ?></a>!</p>
 <ul>
     <li><a href="logout.php">Log out</a></li>
+    <li><a href="update.php">Update details</a></li>
 </ul>
 <?php
+
+    if($user->role('admin')) {
+        echo 'you are admin!';
+    }
+
+    if($user->role('moderator')) {
+        echo 'you are moderator!';
+    }
+
 } else {
 ?>
 <p>You need to <a href="login.php">login</a> or <a href="register.php">register</a></p>
