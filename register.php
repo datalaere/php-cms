@@ -1,11 +1,11 @@
 <?php
-    require_once('includes/bootstrap/app.php');
+require_once('includes/bootstrap/app.php');
 
 if(Request::exists()) {
-    if(!Token::get(Request::get('token'))) {
+    if(!Token::check(Request::get('token'))) {
         if(Request::exists()) {
             $v = new Validate();
-            $check = $v->check($_POST, array(
+            $validation = $v->check($_POST, array(
                 'name' => array(
                     'required' => true,
                     'min' => 2,
@@ -24,7 +24,7 @@ if(Request::exists()) {
                 )
             ));
 
-            if($check->passed()) {
+            if($validation->passed()) {
                 
                 $user = new Auth();
                 $salt = Hash::salt(32);
@@ -39,13 +39,14 @@ if(Request::exists()) {
                     ));
 
                     Session::flash('success', 'You registered successfully!');
-                    
+                    Response::redirect('index.php');
+
                 } catch(Exception $error) {
                     die($error->getMessage());
                 }
 
             } else {
-                foreach($check->errors() as $error) {
+                foreach($validation->errors() as $error) {
                     echo $error, '<br>';
                 }
             }

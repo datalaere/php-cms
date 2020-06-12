@@ -10,7 +10,7 @@ class Token
         );
     }
 
-    public static function get($token)
+    public static function check($token)
     {
         $tokenName = Config::get('session.token_name');
 
