@@ -9,12 +9,12 @@ return array(
         'name' => 'oop-auth',
         'charset' => 'utf8'
     ),
-    'remember' => array(
+    'cookie' => array(
         'name' => 'hash',
         'expiry' => 604800
     ),
     'session' => array(
         'name' => 'user',
-        'token_name' => 'csrf'
+        'token' => 'csrf'
     )
 );

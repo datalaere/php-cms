@@ -13,13 +13,18 @@ if(Request::exists()) {
         if($validation->passed()) {
 
             $user = new Auth();
+
+            $remember = (Request::get('remember') === 'on') ? true : false;
+
             $login = $user->login(
                 Request::get('username'),
-                Request::get('password')
+                Request::get('password'),
+                $remember
             );
 
             if($login) {
-                //login
+                Session::flash('success', 'You logged in successfully!');
+                Response::redirect('index.php');
             } else {
                 echo '<p>Login failed</p>';
             }
@@ -42,6 +47,12 @@ if(Request::exists()) {
     <div class="field">
         <label for="password">Password</label>
         <input type="password" name="password" id="password" value="<?php  esc(Request::get('password'));  ?>" autocomplete="off">
+    </div>
+
+    <div class="field">
+        <label for="remember">
+            <input type="checkbox" name="remember" id="remember">Remember me
+        </label>
     </div>
 
     <input type="hidden" name="token" value="<?php esc(Token::set()); ?>">

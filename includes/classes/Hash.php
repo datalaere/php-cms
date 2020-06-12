@@ -2,15 +2,24 @@
 
 class Hash
 {
-    public static function make($string, $salt = '')
+    public static function make($string)
     {
-        return hash('sha256', $string . $salt);
+        return hash('sha256', $string);
     }
 
-    public static function salt($length)
+    public static function verify($string, $hash)
+    {
+        if(self::make($string) === $hash)  {
+            return true;
+        }
+
+        return false;
+    }
+
+    public static function random($length)
     {
         // mcrypt_create_iv() is removed in PHP 7
-        return random_bytes($length);
+        return bin2hex(random_bytes($length));
     }
 
     public static function unique()

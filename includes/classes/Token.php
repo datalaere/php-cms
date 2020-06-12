@@ -5,18 +5,18 @@ class Token
     public static function set()
     {
         return Session::set(
-            Config::get('session.token_name'), 
+            Config::get('session.token'), 
             md5(uniqid())
         );
     }
 
     public static function check($token)
     {
-        $tokenName = Config::get('session.token_name');
+        $token_name = Config::get('session.token');
 
-        if(Session::exists($tokenName) && 
-        $token === Session::get($tokenName)) {
-            Session::delete($tokenName);
+        if(Session::exists($token_name) && 
+        $token === Session::get($token_name)) {
+            Session::delete($token_name);
             return true;
         }
 

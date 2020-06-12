@@ -12,3 +12,12 @@ foreach(glob('includes/functions/*') as $function) {
     require_once($function);
 }
 
+if(Cookie::exists(Config::get('cookie.name')) && !Session::exists(Config::get('session.name'))) {
+    $hash = Cookie::get(Config::get('cookie.name'));
+    $user = DB::singleton()->get('users', array('session', '=', $hash));
+
+    if($user->count()) {
+        $user = new Auth($user->first()->id);
+        $user->login();
+    }
+}

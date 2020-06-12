@@ -2,8 +2,7 @@
 require_once('includes/bootstrap/app.php');
 
 if(Request::exists()) {
-    if(!Token::check(Request::get('token'))) {
-        if(Request::exists()) {
+    if(Token::check(Request::get('token'))) {
             $v = new Validate();
             $validation = $v->check($_POST, array(
                 'name' => array(
@@ -27,12 +26,11 @@ if(Request::exists()) {
             if($validation->passed()) {
                 
                 $user = new Auth();
-                $salt = Hash::salt(32);
+                
                 try {
                     $user->create(array(
                         'username' => Request::get('username'),
-                        'password' => Hash::make(Request::get('password'), $salt),
-                        'salt' => $salt,
+                        'password' => password_hash(Request::get('password'), PASSWORD_DEFAULT),
                         'name' => Request::get('name'),
                         'joined' => date('Y-m-d H:i:s'),
                         'role' => 1
@@ -47,11 +45,12 @@ if(Request::exists()) {
 
             } else {
                 foreach($validation->errors() as $error) {
-                    echo $error, '<br>';
+                    echo "<p>$error</p>";
                 }
             }
-        }
     }
+} else {
+    echo 'Token false!';
 }
 ?>
 <form action="" method="POST">
