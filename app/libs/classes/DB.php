@@ -75,12 +75,18 @@ class DB
                     return $this;
                 }
             }
+        } else {
+            $sql = "{$action} FROM {$table}";
+
+            if(!$this->query($sql)->error()) {
+                return $this;
+            }
         }
 
         return false;
     }
 
-    public function get($table, $where)
+    public function get($table, $where = array())
     {
         return $this->action('SELECT *', $table, $where);
     }
@@ -142,7 +148,11 @@ class DB
 
     public function first()
     {
-        return $this->results()[0];
+        if($this->results()) {
+            return $this->results()[0];
+        }
+
+        return false;
     }
 
     public function error()

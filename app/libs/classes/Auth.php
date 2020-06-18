@@ -1,20 +1,12 @@
 <?php
 
-class Auth
+class Auth extends UserModel
 {
     private $_db;
-    private $_data;
     private $_auth;
     private $_session_name;
     private $_cookie_name;
     private $_cookie_expiry;
-
-    private $_table = 'users';
-    private $_fields = array(
-        'ID' => 'id',
-        'USERNAME' => 'username',
-        'SESSION' => 'session'
-    );
 
     public function __construct($user = null)
     {    
@@ -36,40 +28,6 @@ class Auth
         } else {
             $this->find($user);
         }
-    }
-
-    public function update($fields = array(), $id = null)
-    {
-        if(!$id && $this->auth()) {
-            $id = $this->getUserId();
-        }
-
-        if(!$this->_db->update($this->_table, $id, $fields)) {
-            throw new Exception('Error updating user!');
-        }
-    }
-
-    public function create($fields = array())
-    {
-        if(!$this->_db->insert($this->_table, $fields)) {
-            throw new Exception('Error creating user!');
-        }
-    }
-
-    public function find($user = null)
-    {
-        if($user) {
-
-            $field = (is_numeric($user)) ? $this->_fields['ID'] : $this->_fields['USERNAME'];
-            $data = $this->_db->get($this->_table, array($field, '=', $user));
-            
-            if($data->count()) {
-                $this->_data = $data->first();
-                return true;
-            }
-        }
-
-        return false;
     }
 
     public function login($username = null, $password = null, $remember = false)
@@ -107,16 +65,6 @@ class Auth
         return false;
     }
 
-    public function getUserId()
-    {
-        return $this->data()->id;
-    }
-
-    public function getUserSession()
-    {
-        return $this->data()->session;
-    }
-
     public function role($key)
     {
         $role = json_decode($this->data()->role, true);
@@ -126,11 +74,6 @@ class Auth
         }
 
         return false;
-    }
-
-    public function exists()
-    {
-        return (!empty($this->data())) ? true : false;
     }
 
     public function logout()
@@ -144,12 +87,7 @@ class Auth
         Cookie::delete($this->_cookie_name);
     }
 
-    public function data()
-    {
-        return $this->_data;
-    }
-
-    public function auth()
+    public function check()
     {
         return $this->_auth;
     }

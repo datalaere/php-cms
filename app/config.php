@@ -1,12 +1,19 @@
 <?php
 
 return array(
+    'app' => array(
+        'name' => 'app',
+        'url' => 'http://localhost/github/php-oop-login-register-system',
+        'errors' => true,
+        'abspath' => dirname(__DIR__),
+        'views' => dirname(__DIR__) . '/app/views/'
+    ),
     'db' => array(
         'driver' => 'mysql',
         'host' => '127.0.0.1',
         'username' => 'root',
         'password' => '',
-        'name' => 'oop-auth',
+        'name' => 'php-cms',
         'charset' => 'utf8'
     ),
     'cookie' => array(
